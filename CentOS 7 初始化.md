@@ -27,11 +27,11 @@ cp sshd_config sshd_config.bak
 vi /etc/ssh/sshd_config
 ```
 
-ListenAddress 0.0.0.0
-ListenAddress ::
-PermitRootLogin yes
-PasswordAuthentication yes
-UseDNS no
+- ListenAddress 0.0.0.0
+- ListenAddress ::
+- PermitRootLogin yes
+- PasswordAuthentication yes
+- UseDNS no
 
 ```bash
 systemctl restart sshd
@@ -54,20 +54,28 @@ export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/lib/pkgconfig:/usr/lib64/pkgconfig:
 vi /etc/ld.so.conf.d/custom.conf
 ```
 
+```bash
 /usr/lib
 /usr/lib64
 /usr/local/lib
 /usr/local/lib64
+```
 
+```bash
 ldconfig
+```
 
+```bash
 vi ~/.bash_profile
+```
 
 ```bash
 export PS1='[\e[1;32m\u@\h\e[0m \e[1;34m\w\e[0m]\$ '
 ```
 
+```bash
 vi ~/.bashrc
+```
 
 ```bash
 alias c='clear'
@@ -98,7 +106,18 @@ sed -e 's|^mirrorlist=|#mirrorlist=|g' \
 
 ```bash
 vi /etc/yum/pluginconf.d/fastestmirror.conf
+```
+
+```bash
 # enabled=0
+```
+
+```bash
+vi /etc/yum.conf
+```
+
+```bash
+keepcache=1
 ```
 
 ```bash
