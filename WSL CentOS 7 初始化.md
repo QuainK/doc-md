@@ -1,8 +1,16 @@
+# WSL CentOS 7 初始化
+
 设置网络适配器为 VMNet 8 NAT 模式
+
+设置 root 密码
 
 语言 en-US
 时区 Asia/Shanghai
-root 密码
+
+```bash
+timedatectl
+timedatectl set-timezone Asia/Shanghai
+```
 
 查看网卡
 
@@ -109,7 +117,7 @@ vi /etc/yum/pluginconf.d/fastestmirror.conf
 ```
 
 ```bash
-# enabled=0
+enabled=0
 ```
 
 ```bash
