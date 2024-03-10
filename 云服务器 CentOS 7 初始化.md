@@ -70,6 +70,10 @@ alias r='yum remove'
 
 alias p='ps -ef | grep'
 alias n='netstat -tulp | grep'
+
+alias pl='pkg-config --list-all | grep'
+alias pm='pkg-config --modversion'
+alias lg='ldconfig -p | grep'
 ```
 
 修改完用户级终端配置后，需要刷新终端

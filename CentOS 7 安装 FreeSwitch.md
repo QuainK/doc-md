@@ -9,7 +9,11 @@ mkdir freeswitch
 cd freeswitch
 
 # basic
-yum install git gcc-c++ autoconf automake libtool python ncurses-devel zlib-devel libjpeg-devel openssl-devel e2fsprogs-devel curl-devel pcre-devel speex-devel python-devel python3-devel
+yum install git gcc-c++ autoconf automake \
+libtool python ncurses-devel zlib-devel \
+libjpeg-devel openssl-devel e2fsprogs-devel \
+curl-devel pcre-devel speex-devel \
+python-devel python3-devel
 
 # unzip
 yum install unzip
@@ -54,7 +58,9 @@ yum install libuuid-devel libatomic openssl-devel
 wget -O libks-2.0.2.zip https://github.com/signalwire/libks/archive/refs/tags/v2.0.2.zip
 unzip libks-2.0.2.zip
 cd libks-2.0.2
-cmake . -DCMAKE_INSTALL_PREFIX:PATH=/usr/local
+mkdir build
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX:PATH=/usr/local
 make
 make install
 # make uninstall
@@ -63,11 +69,11 @@ ldconfig
 cd ..
 
 yum install yum-plugin-ovl centos-release-scl rpmdevtools yum-utils git
-yum install devtoolset-7
+yum install devtoolset-7-gcc-c++
 # 添加到profile永久生效
 source /opt/rh/devtoolset-7/enable
 
-yum install unixODBC-devel sqlite-devel
+yum install unixODBC-devel sqlite-devel libsq3-devel
 yum install erlang
 yum install yasm
 yum install ldns-devel libedit-devel libvpx-devel libvpx-utils opus-devel lua-devel libsndfile-devel libtiff-devel
@@ -80,6 +86,8 @@ rpm -Uvh http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.
 yum install ffmpeg ffmpeg-devel
 ldconfig
 
+# https://codeload.github.com/signalwire/freeswitch/zip/refs/heads/v1.10
+
 # freeswitch
 # https://developer.signalwire.com/freeswitch/FreeSWITCH-Explained/Installation/Linux/CentOS-7-and-RHEL-7_10289546/
 wget -O freeswitch-1.10.10.zip https://github.com/signalwire/freeswitch/archive/refs/tags/v1.10.10.zip
@@ -87,15 +95,17 @@ unzip freeswitch-1.10.10.zip
 cd freeswitch-1.10.10
 ./bootstrap.sh -j
 vim modules.conf
+#applications/mod_verto
 #applications/mod_signalwire
+
 # ./configure --enable-portable-binary \
 #     --prefix=/usr/local --localstatedir=/var --sysconfdir=/etc \
 #     --with-gnu-ld --with-python3 --with-erlang --with-openssl \
 #     --enable-core-odbc-support
 ./configure --prefix=/usr/local --localstatedir=/var --sysconfdir=/etc \
---with-gnu-ld --with-python3 --with-erlang --with-openssl \
+--with-gnu-ld --with-python3 --with-openssl \
 --enable-core-odbc-support
-# 每次make出错，排查问题后，都要重新configure
+# 每次 configure 出错，排查问题后，都要重新configure
 make
 make install
 make -j cd-sounds-install
