@@ -1,4 +1,4 @@
-# Janus 服务器的安装配置
+# CentOS 7 安装 Janus
 
 ## 〇、整体流程
 
@@ -15,7 +15,8 @@
 
 ## 一、准备 Janus 依赖
 
-先用包管理器尽量安装好各种依赖，包管理器搜不到这个包或者能装的最高版本也不符合时，再依次从依赖包的官网或者 Git 仓库下载源码，进行本地编译安装。
+先用包管理器尽量安装好各种依赖，包管理器搜不到这个包或者能装的最高版本也不符合时，再依次从依赖包的官网或者 Git
+仓库下载源码，进行本地编译安装。
 
 ---
 
@@ -45,7 +46,6 @@ yum install libmicrohttpd-devel jansson-devel \
 
 - jansson-devel
 - openssl-devel
-- sofia-sip-devel
 - glib2-devel
 - opus-devel
 - libogg-devel
@@ -61,18 +61,20 @@ yum install libmicrohttpd-devel jansson-devel \
 
 - nettle
 - gnutls
-- libmicrohttpd-devel
-- libsrtp-devel
-- libnice-devel
-- libwebsockets-devel
+- libmicrohttpd
+- libsrtp
+- libnice
+- libwebsockets
 
 ---
 
 ### 设置 pkgconfig 环境变量
 
-#LD_LIBRARY_PATH=/usr/lib:/usr/lib64:/usr/local/lib:/usr/local/lib64
+```bash
 PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/lib64/pkgconfig
-在/etc/ld.so.conf.d 里新建文件 lib.conf 添加几行
+```
+
+在/etc/ld.so.conf.d 里新建文件 custom.conf 添加几行
 
 ### 将 gcc 升级到 7.x 版本
 
@@ -520,7 +522,7 @@ janus --help
 
 coturn, turnserver, turnadmin 等命令都是此工具的命令
 
-1.  通常 yum 可以直接安装
+1. 通常 yum 可以直接安装
 
 ```bash
 yum install coturn
