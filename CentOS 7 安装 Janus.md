@@ -57,7 +57,7 @@ yum install libmicrohttpd-devel jansson-devel \
 - autoconf
 - automake
 
-剩下的一些都要源码安装：
+剩下的一些可能要源码安装，比如：
 
 - nettle
 - gnutls
@@ -65,16 +65,9 @@ yum install libmicrohttpd-devel jansson-devel \
 - libsrtp
 - libnice
 - libwebsockets
+- sofia-sip-devel
 
 ---
-
-### 设置 pkgconfig 环境变量
-
-```bash
-PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/lib64/pkgconfig
-```
-
-在/etc/ld.so.conf.d 里新建文件 custom.conf 添加几行
 
 ### 将 gcc 升级到 7.x 版本
 
@@ -87,8 +80,35 @@ yum install devtoolset-7-gcc-c++
 # 使用此句
 # scl enable devtoolset-7 bash
 # 或者此句
-# 就用此局，上面那句会出现死循环登不进shell
+# 就用此句，上面那句可能会出现死循环登不进shell
 source /opt/rh/devtoolset-7/enable
+```
+
+### 设置环境变量
+
+编辑 /etc/profile
+
+```bash
+# 将FreeSwitch的bin目录添加到环境变量，方便输入终端命令
+PATH=$PATH:/usr/local/freeswitch/bin
+
+# Janus bin
+export PATH=$PATH:/opt/janus/bin
+
+# pkg-config管理的共享库路径
+export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/lib/pkgconfig:/usr/lib64/pkgconfig:/usr/local/lib/pkgconfig:/usr/local/lib64/pkgconfig
+# 系统共享库路径，这里不需要，只需要在/etc/ld.so.conf.d/里创建文件并写上lib路径
+#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib:/usr/lib64:/usr/local/lib:/usr/local/lib64
+
+# 启用 gcc 7.x
+#scl enable devtoolset-7 bash
+source /opt/rh/devtoolset-7/enable
+```
+
+### 安装 Anaconda Python
+
+```bash
+# 去官网下载sh安装脚本，按提示安装即可
 ```
 
 ### 准备 meson ninja
@@ -115,6 +135,18 @@ GNU 密码库
 #### 必需依赖
 
 - libgmp (libhogweed)
+
+```bash
+# 6.0.0
+yum install gmp-devel
+wget https://gmplib.org/download/gmp/gmp-6.0.0.tar.xz
+tar -xvf gmp-6.0.0.tar.xz
+cd gmp-6.0.0.tar.xz
+./configure --prefix=/usr/local
+make
+make check
+make install
+```
 
 #### 编译安装过程
 
@@ -173,13 +205,14 @@ yum install gnutls-devel
 用 make 编译
 
 ```bash
+wget https://www.gnupg.org/ftp/gcrypt/gnutls/v3.5/gnutls-3.5.19.tar.xz
+tar -xvf gnutls-3.5.19.tar.xz
 # 进入源码根目录
 cd gnutls-3.5.19
 # 生成编译配置信息Makefile
 # 设置安装路径 /usr/local
 # 包含和排除引入某些库
-# ./configure --prefix=/usr/local --with-included-libhogweed --with-included-libtasn1 --with-included-unistring --without-p11-kit
-./configure --prefix=/usr/local --with-included-libtasn1 --with-included-unistring --without-p11-kit
+./configure --prefix=/usr/local --enable-shared --enable-mini-gmp
 # 编译
 make
 # 安装
@@ -221,6 +254,8 @@ HTTPS 支持需要 libgnutls
 用 make 编译
 
 ```bash
+wget -O libmicrohttpd-0.9.77.tar.gz https://ftp.gnu.org/gnu/libmicrohttpd/libmicrohttpd-0.9.77.tar.gz
+tar -zxvf libmicrohttpd-0.9.77.tar.gz
 # 进入源码根目录
 cd libmicrohttpd-0.9.77
 # 生成编译配置信息Makefile
@@ -310,10 +345,11 @@ yum 不要安装对应包（\*-devel），否则会有版本冲突
 用 Meson 构建，用 Ninja 编译
 
 ```bash
+wget -O libnice-0.1.21.zip https://codeload.github.com/libnice/libnice/zip/refs/tags/0.1.21
 # 进入源码根目录
 cd libnice-0.1.18
 # 生成构建依赖信息，生成编译目录 build
-meson  build
+meson build
 # 进入编译目录
 cd build
 # 编译（ninja不带路径默认当前目录，-C [path] 指定路径）
@@ -354,6 +390,7 @@ Websocket 通信支持
 用 CMake 构建，用 make 编译
 
 ```bash
+wget -O libwebsockets-4.3.2.zip https://github.com/warmcat/libwebsockets/archive/refs/tags/v4.3.2.zip
 # 进入源码根目录
 cd libwebsockets-4.3.2
 # 创建编译目录 build
@@ -399,7 +436,7 @@ sh autogen.sh (if building from darcs)
 ./configure
 make
 make install
-make uninstall
+# make uninstall
 ldconfig
 ```
 
@@ -474,7 +511,6 @@ sh autogen.sh
 # 启用WebSocket
 # 启用srtp 2.x （用于SIP电话）
 ./configure --prefix=/opt/janus --enable-rest --enable-websockets --enable-libsrtp2
-#./configure --prefix=/opt/janus --enable-websockets --enable-libsrtp2
 # 编译
 make
 # 安装
