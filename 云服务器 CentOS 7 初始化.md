@@ -150,7 +150,7 @@ vim custom.sh
 
 ```bash
 # pkg-config 管理的共享库路径
-if [ ! $PKG_CONFIG_PATH] then
+if [!$PKG_CONFIG_PATH] then
     export $PKG_CONFIG_PATH=/usr/lib/pkgconfig:/usr/lib64/pkgconfig:/usr/local/lib/
 else
     export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/lib/pkgconfig:/usr/lib64/pkgconfig:/usr/local/lib/
