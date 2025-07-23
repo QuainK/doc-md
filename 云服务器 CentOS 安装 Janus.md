@@ -23,7 +23,7 @@ https://codeload.github.com/freeswitch/sofia-sip/zip/refs/tags/v1.13.15
 unzip sofia-sip-1.13.15.zip
 cd sofia-sip-1.13.15
 sh autogen.sh (if building from darcs)
-./configure --prefix=/usr
+./configure --prefix=/usr/local
 make
 make install
 # make uninstall
@@ -31,8 +31,10 @@ ldconfig
 pkg-config --modversion sofia-sip-ua
 
 wget -O libsrtp-2.0.0.zip \
-https://github.com/cisco/libsrtp/archive/v2.0.0.zip
-./configure --prefix=/usr --enable-openssl
+https://codeload.github.com/cisco/libsrtp/zip/refs/tags/v2.0.0
+unzip libsrtp-2.0.0.zip
+cd libsrtp-2.0.0
+./configure --prefix=/usr/local --enable-openssl
 make
 make runtest
 make install
@@ -48,6 +50,8 @@ ln -s cmake3 cmake && ln -s ccmake3 ccmake
 
 wget -O libnice-0.1.18.zip \
 https://codeload.github.com/libnice/libnice/zip/refs/tags/0.1.18
+unzip libnice-0.1.18.zip
+cd libnice-0.1.18
 meson build
 cd build
 ninja
@@ -59,7 +63,7 @@ pkg-config --modversion nice
 wget -O usrsctp-0.9.5.0.zip \
 https://codeload.github.com/sctplab/usrsctp/zip/refs/tags/0.9.5.0
 ./bootstrap
-./configure --prefix=/usr
+./configure --prefix=/usr/local
 make
 make install
 ldconfig
@@ -68,7 +72,7 @@ wget -O libmicrohttpd-0.9.77.tag.gz \
 https://ftp.gnu.org/gnu/libmicrohttpd/libmicrohttpd-0.9.77.tar.gz
 tar zxvf libmicrohttpd-0.9.77.tag.gz
 cd libmicrohttpd-0.9.77
-./configure --prefix=/usr \
+./configure --prefix=/usr/local \
 --enable-https=yes --with-ssl
 make
 make install
@@ -81,7 +85,7 @@ cd libwebsockets-4.3.2
 mkdir build
 cd build
 cmake \
--DCMAKE_INSTALL_PREFIX:PATH=/usr \
+-DCMAKE_INSTALL_PREFIX:PATH=/usr/local \
 -DCMAKE_C_FLAGS="-fpic" ..
 make
 make install
@@ -92,7 +96,7 @@ xargs rm < install_manifest.txt
 
 wget -O janus-gateway-1.1.4.zip \
 https://codeload.github.com/meetecho/janus-gateway/zip/refs/tags/v1.1.4
-unzip ljanus-gateway-1.1.4.zip
+unzip janus-gateway-1.1.4.zip
 cd janus-gateway-1.1.4
 sh autogen.sh
 ./configure --prefix=/opt/janus \
